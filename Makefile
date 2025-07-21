@@ -8,7 +8,8 @@ client: client.o
 
 ##
 
-REMOTE := root@135.181.201.184
+# REMOTE := root@135.181.201.184
+REMOTE := root@localhost
 REPOSITORY := docker.io/aci2n/private
 VERSION = $(shell git rev-parse --short HEAD)
 
@@ -32,11 +33,6 @@ push_server_prod:
 push_server_beta:
 	$(call push_image,server,beta)
 
-build_client:
-	$(call build_image,client)
-push_client_prod:
-	$(call push_image,client,prod)
-
 build_caddy:
 	$(call build_image,caddy)
 push_caddy:
@@ -44,13 +40,9 @@ push_caddy:
 
 ##
 
-define sync_quadlets
-	rsync --recursive --delete quadlets/ '$(1)'
-endef
+sync_remote_quadlets:
+	rsync --recursive --delete quadlets/ $(REMOTE):/etc/containers/systemd/piano-tree
+	ssh $(REMOTE) 'systemctl daemon-reload'
 
-local_quadlets:
-	$(call sync_quadlets,/run/containers/systemd/piano-tree)
-
-remote_quadlets:
-	$(call sync_quadlets,$(REMOTE):/etc/containers/systemd/piano-tree)
-
+update_remote_containers:
+	ssh $(REMOTE) 'podman auto-update'

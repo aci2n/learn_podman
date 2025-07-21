@@ -1,0 +1,15 @@
+[Unit]
+Description=Caddy container
+
+[Container]
+Image=docker.io/aci2n/private:caddy-latest
+PublishPort=127.0.0.1:80:80
+AutoUpdate=registry
+Network=piano-tree.network
+
+[Service]
+TimeoutStartSec=900
+Restart=always
+
+[Install]
+WantedBy=multi-user.target default.target
