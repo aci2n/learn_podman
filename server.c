@@ -8,7 +8,7 @@
 #define PORT 8080
 
 void sigint_handler(int sig) {
-  printf("Received SIGINT (Ctrl+C)\n");
+  printf("Received %d (Ctrl+C)\n", sig);
   // Perform any cleanup tasks here if necessary
 
   // Terminate the program with status 0
@@ -22,10 +22,11 @@ answer_to_connection(void *cls, struct MHD_Connection *connection,
                      void **con_cls) {
   struct MHD_Response *response;
   int ret;
+  char* content = "HELLO FRIENDS HOW ARE YOU";
 
   if (NULL == cls) {
-    response = MHD_create_response_from_buffer(5, (void *)"HELLO",
-                                               MHD_RESPMEM_PERSISTENT);
+    response = MHD_create_response_from_buffer(
+																							 strlen(content), content, MHD_RESPMEM_PERSISTENT);
   } else {
     printf("Unexpected second request.\n");
     return MHD_NO;
@@ -43,6 +44,11 @@ answer_to_connection(void *cls, struct MHD_Connection *connection,
 
 int main() {
   if (signal(SIGINT, sigint_handler) == SIG_ERR) {
+    perror("signal");
+    return EXIT_FAILURE;
+  }
+	
+  if (signal(SIGTERM, sigint_handler) == SIG_ERR) {
     perror("signal");
     return EXIT_FAILURE;
   }

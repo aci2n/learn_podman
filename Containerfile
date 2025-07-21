@@ -1,4 +1,4 @@
-FROM archlinux:latest as base
+FROM docker.io/archlinux/archlinux:latest as base
 RUN pacman -Syu --noconfirm
 
 ##
@@ -34,3 +34,8 @@ FROM base AS client
 RUN pacman -S --noconfirm curl
 COPY --from=build_client /build/client /usr/local/bin/
 CMD ["client"]
+
+##
+
+FROM docker.io/caddy/caddy:alpine AS caddy
+COPY Caddyfile /etc/caddy/Caddyfile
