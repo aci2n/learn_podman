@@ -1,2 +1,6 @@
-app: main.o
-	$(CC) $(LDFLAGS) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+server: LDLIBS := -lmicrohttpd
+server: server.o
+
+client: LDLIBS := -lcurl
+client: client.o
