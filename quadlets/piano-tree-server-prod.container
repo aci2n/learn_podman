@@ -4,8 +4,10 @@ Description=Server container
 [Container]
 Image=docker.io/aci2n/private:server-prod
 AutoUpdate=registry
-Network=piano-tree-prod.network
-NetworkAlias=piano-tree-server
+Network=piano-tree.network
+
+# used in Caddyfile reverse_proxy
+NetworkAlias=piano-tree-server-prod
 
 [Service]
 TimeoutStartSec=900

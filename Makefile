@@ -29,6 +29,8 @@ build_server:
 	$(call build_image,server)
 push_server_prod:
 	$(call push_image,server,prod)
+push_server_beta:
+	$(call push_image,server,beta)
 
 build_client:
 	$(call build_image,client)
@@ -37,8 +39,8 @@ push_client_prod:
 
 build_caddy:
 	$(call build_image,caddy)
-push_caddy_prod:
-	$(call push_image,caddy,prod)
+push_caddy:
+	$(call push_image,caddy,latest)
 
 ##
 
